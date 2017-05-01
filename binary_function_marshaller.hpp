@@ -51,14 +51,17 @@ public:
         Blob parameterBlob;
         stream<back_insert_device<Blob>> parameterStream{parameterBlob};
         binary_oarchive parameterArchive{ parameterStream};
+
         parameterArchive << parameterTuple;
+
         parameterStream.flush();
 
         Blob resultBlob = m_function->Call( parameterBlob);
 
-        ReturnType result;
         stream<array_source> resultStream{ &resultBlob.front(), resultBlob.size()};
         binary_iarchive resultArchive{ resultStream};
+
+        ReturnType result;
         resultArchive >> result;
 
         return result;
@@ -67,6 +70,14 @@ private:
     std::shared_ptr<FunctionInterface> m_function;
 };
 
+/**
+ * Create a functor object that has the same prototype as the function
+ * given as the first argument and that will Marshal function arguments
+ * and forward the function call to a FunctionInterface instance.
+ *
+ * The first argument value (the function pointer) is ignored and only its
+ * type (its prototype) is used.
+ */
 template<typename ReturnType, typename... Parameters>
 BinaryFunctionMarshaller< ReturnType (Parameters...)> Marshal(
         ReturnType (*)( Parameters...),

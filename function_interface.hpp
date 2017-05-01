@@ -9,9 +9,8 @@
 #define FUNCTION_INTERFACE_HPP_
 
 #include <vector>
+#include "blob.hpp"
 
-using Byte = char; // char is chosen to ease iostream definitions
-using Blob = std::vector<Byte>;
 
 class FunctionInterface
 {

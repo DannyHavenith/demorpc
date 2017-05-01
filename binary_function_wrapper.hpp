@@ -85,11 +85,22 @@ private:
     Function m_function;
 };
 
+//template< typename ReturnType, typename... Parameters>
+//std::shared_ptr<FunctionInterface> Wrap( ReturnType (&function)( Parameters... pars))
+//{
+//    return std::make_shared<BinaryFunctionWrapper<ReturnType, Parameters...>>(function);
+//}
+
 template< typename ReturnType, typename... Parameters>
-std::shared_ptr<FunctionInterface> Wrap( ReturnType (&function)( Parameters... pars))
+std::shared_ptr<FunctionInterface> Wrap( ReturnType (*function)( Parameters... pars))
 {
     return std::make_shared<BinaryFunctionWrapper<ReturnType, Parameters...>>(function);
 }
 
+template< typename ObjectType, typename ReturnType, typename... Parameters>
+std::shared_ptr<FunctionInterface> Wrap( std::shared_ptr<ObjectType> &object, ReturnType (ObjectType::*function)( Parameters... pars))
+{
+    return std::make_shared<BinaryFunctionWrapper<ReturnType, Parameters...>>(function);
+}
 
 #endif /* BINARY_FUNCTION_WRAPPER_HPP_ */
