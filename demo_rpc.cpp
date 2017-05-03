@@ -25,18 +25,18 @@
 // call functions on the remote server
 void client( const std::string &host, const std::string &port)
 {
-	boost::asio::io_service io_service;
-	RpcProxy proxy{ io_service, host, port};
+    boost::asio::io_service io_service;
+    RpcProxy proxy{ io_service, host, port};
 
-	// create a function proxy by giving an explicit function prototype
+    // create a function proxy by giving an explicit function prototype
     auto remoteAdd = CreateProxyFunction<int (int, int)>( proxy, "add");
 
     // create a function proxy by giving an example function prototype.
     // Note that this will never call the addAll function locally, it's
     // just used to provide a function prototype.
-	auto remoteAddAll = CreateProxyFunction( addAll, proxy, "addAll");
+    auto remoteAddAll = CreateProxyFunction( addAll, proxy, "addAll");
 
-	// call the functions on the remote server.
+    // call the functions on the remote server.
     std::cout << remoteAdd( 40,2 ) << '\n';
     std::cout << remoteAddAll( {"hello there, ", "world!"}) << '\n';
 }
@@ -46,7 +46,7 @@ void server( unsigned short port)
 {
     std::cout << "Running service on port " << port << '\n';
 
-	boost::asio::io_service io_service;
+    boost::asio::io_service io_service;
     RpcService service{ io_service, port};
 
     // register two functions
@@ -78,21 +78,21 @@ void inproc()
 
 int main( int argc, const char *argv[])
 {
-	if (argc >= 2)
-	{
-	    if (argv[1] == std::string("server"))
-	    {
-	        server( 65432);
-	    }
-	    else
-	    {
-	        client("localhost", "65432");
-	    }
-	}
-	else
-	{
-	    inproc();
-	}
+    if (argc >= 2)
+    {
+        if (argv[1] == std::string("server"))
+        {
+            server( 65432);
+        }
+        else
+        {
+            client("localhost", "65432");
+        }
+    }
+    else
+    {
+        inproc();
+    }
 
 
     return 0;
